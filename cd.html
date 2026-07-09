@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Civic Desk — Report a Local Issue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens ===== */
+:root {
+  --ink: #1B3A4B;
+  --ink-light: #4A6572;
+  --paper: #EDE8DE;
+  --paper-dark: #DDD6C7;
+  --paper-white: #F7F4EC;
+  --stamp-red: #B23A2E;
+  --signal-amber: #C97C1F;
+  --signal-amber-bg: #F3E1C4;
+  --moss: #3F6B4C;
+  --moss-bg: #DCE7DD;
+  --blue-bg: #DCE5E9;
+  --line: #C6BEAC;
+
+  --font-display: 'Oswald', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-light);
+  margin: 0 0 12px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--stamp-red);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 13px 24px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--ink);
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease, color 0.12s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--ink); color: var(--paper-white); }
+.btn-primary:hover { background: var(--stamp-red); border-color: var(--stamp-red); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--paper-dark); }
+
+/* ===== Header ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--paper);
+  border-bottom: 1.5px solid var(--ink);
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  gap: 24px;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); }
+.brand-mark {
+  width: 30px; height: 30px;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; border-radius: var(--radius);
+}
+.brand-name { font-size: 18px; font-weight: 600; }
+.header-nav { display: flex; gap: 28px; font-size: 14px; }
+.header-nav a { text-decoration: none; color: var(--ink-light); border-bottom: 2px solid transparent; padding-bottom: 3px; }
+.header-nav a:hover { color: var(--ink); border-color: var(--stamp-red); }
+.live-count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-light);
+  display: flex; align-items: center; gap: 7px;
+  white-space: nowrap;
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--moss); display: inline-block; }
+
+/* ===== Hero ===== */
+.hero { padding: 72px 0 88px; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: center;
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stamp-red);
+  margin: 0 0 18px;
+}
+h1 {
+  font-size: 52px;
+  line-height: 1.06;
+  margin-bottom: 22px;
+}
+.hero-underline { text-decoration: underline; text-decoration-color: var(--stamp-red); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+.hero-sub { font-size: 17px; color: var(--ink-light); max-width: 46ch; margin-bottom: 30px; }
+.hero-actions { display: flex; gap: 14px; }
+
+/* Ticket stub — signature element */
+.ticket-stub {
+  background: var(--paper-white);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 22px 22px 26px;
+  position: relative;
+  transform: rotate(1.4deg);
+  box-shadow: 8px 10px 0 var(--paper-dark);
+}
+.ticket-stub-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-light);
+  margin-bottom: 14px;
+}
+.stamp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 4px 9px;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+.stamp-amber { color: var(--signal-amber); background: var(--signal-amber-bg); }
+.stamp-blue { color: var(--ink); background: var(--blue-bg); }
+.stamp-moss { color: var(--moss); background: var(--moss-bg); }
+.stamp-red { color: var(--stamp-red); background: #F3DAD6; }
+
+.ticket-stub-id {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.ticket-stub-row {
+  display: flex; justify-content: space-between;
+  font-size: 14px;
+  padding: 7px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.ticket-stub-row span { color: var(--ink-light); }
+.ticket-perf {
+  height: 1px;
+  margin: 16px -22px;
+  background-image: radial-gradient(circle, var(--paper) 2px, transparent 2.2px);
+  background-size: 14px 1px;
+  background-repeat: repeat-x;
+  border-top: 1px dashed var(--line);
+}
+.ticket-note { font-size: 13.5px; font-style: italic; color: var(--ink-light); margin: 12px 0 0; }
+
+/* ===== Categories ===== */
+.categories { padding: 64px 0; border-top: 1.5px solid var(--ink); }
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.cat-card {
+  text-align: left;
+  background: var(--paper-white);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 8px;
+  font-family: var(--font-body);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.cat-card:hover { transform: translateY(-3px); box-shadow: 4px 6px 0 var(--paper-dark); }
+.cat-card.active { background: var(--ink); color: var(--paper); }
+.cat-card.active .cat-desc { color: var(--paper-dark); }
+.cat-glyph { font-size: 22px; }
+.cat-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; }
+.cat-desc { font-size: 13px; color: var(--ink-light); }
+
+/* ===== Filing form ===== */
+.filing { padding: 72px 0; border-top: 1.5px solid var(--ink); background: var(--paper-white); }
+.filing-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 64px; }
+.filing-intro h2 { font-size: 36px; margin-bottom: 16px; }
+.filing-sub { color: var(--ink-light); margin-bottom: 22px; }
+.filing-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.filing-list li { font-size: 14.5px; padding-left: 18px; position: relative; color: var(--ink-light); }
+.filing-list li::before { content: "—"; position: absolute; left: 0; color: var(--stamp-red); }
+.filing-list strong { color: var(--ink); }
+
+.filing-form { display: flex; flex-direction: column; gap: 18px; }
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+label { font-family: var(--font-mono); font-size: 12.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-light); }
+.optional { text-transform: none; letter-spacing: 0; }
+input, select, textarea {
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 12px 13px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--stamp-red); outline-offset: 1px; }
+.upload-well {
+  border: 1.5px dashed var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  padding: 22px;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.upload-well:hover, .upload-well.dragover {
+  background: var(--paper-dark);
+  border-color: var(--stamp-red);
+}
+.upload-well-inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+.upload-icon { font-size: 22px; margin-bottom: 4px; }
+.upload-text { font-size: 14px; color: var(--ink); }
+.upload-link { color: var(--stamp-red); text-decoration: underline; }
+.upload-hint { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin-top: 2px; }
+
+.upload-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+.upload-thumb {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper-dark);
+}
+.upload-thumb img, .upload-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.upload-thumb .video-badge {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 1px 5px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.upload-thumb .remove-thumb {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: var(--stamp-red);
+  color: var(--paper-white);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-ticket-media {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.board-ticket-media .media-thumb {
+  width: 100%;
+  max-height: 220px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.board-ticket-media .media-thumb img,
+.board-ticket-media .media-thumb video {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  display: block;
+}
+.board-ticket-media.count-2 { display: grid; grid-template-columns: 1fr 1fr; }
+.board-ticket-media.count-2 .media-thumb, .board-ticket-media.count-3 .media-thumb { max-height: 130px; }
+.board-ticket-media.count-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+
+.btn-submit { margin-top: 6px; align-self: flex-start; }
+.form-note { font-family: var(--font-mono); font-size: 13px; color: var(--moss); min-height: 18px; margin: 0; }
+.form-note.error { color: var(--stamp-red); }
+
+/* ===== Board ===== */
+.board { padding: 72px 0; border-top: 1.5px solid var(--ink); }
+.board-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; gap: 20px; flex-wrap: wrap; }
+.board-head h2 { font-size: 30px; }
+.board-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-chip {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.filter-chip.active { background: var(--ink); color: var(--paper); }
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 18px;
+}
+.board-ticket {
+  background: var(--paper-white);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 18px 18px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  animation: fileIn 0.28s ease;
+}
+@keyframes fileIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.board-ticket-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.board-ticket-id { font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-light); }
+.board-ticket-title { font-family: var(--font-display); font-size: 18px; font-weight: 600; margin: 2px 0 0; }
+.board-ticket-meta { font-size: 13px; color: var(--ink-light); display: flex; gap: 12px; flex-wrap: wrap; }
+.board-ticket-desc { font-size: 14px; color: var(--ink); }
+.board-ticket-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+.urgency-tag { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-light); }
+.urgency-tag.urgent { color: var(--stamp-red); }
+.back-btn {
+  font-family: var(--font-mono); font-size: 12.5px;
+  background: transparent; border: 1.5px solid var(--ink); border-radius: 20px;
+  padding: 6px 12px; cursor: pointer; color: var(--ink);
+}
+.back-btn:hover { background: var(--paper-dark); }
+.back-btn.backed { background: var(--moss); border-color: var(--moss); color: var(--paper-white); }
+
+.empty-state {
+  display: none;
+  font-family: var(--font-mono);
+  color: var(--ink-light);
+  text-align: center;
+  padding: 40px 0;
+  border: 1.5px dashed var(--line);
+  border-radius: var(--radius);
+}
+.empty-state.show { display: block; }
+
+/* ===== How it works ===== */
+.how { padding: 72px 0 88px; border-top: 1.5px solid var(--ink); background: var(--paper-white); }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.how-num { font-family: var(--font-mono); font-size: 13px; color: var(--stamp-red); }
+.how-step h3 { font-size: 22px; margin: 10px 0 10px; }
+.how-step p { color: var(--ink-light); font-size: 14.5px; }
+
+/* ===== Footer ===== */
+.site-footer { padding: 26px 0; border-top: 1.5px solid var(--ink); }
+.footer-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-light); flex-wrap: wrap; gap: 8px; }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .hero-grid, .filing-grid { grid-template-columns: 1fr; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+  .how-grid { grid-template-columns: 1fr; }
+  h1 { font-size: 38px; }
+  .field-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .cat-grid { grid-template-columns: 1fr; }
+  .header-nav { display: none; }
+  .ticket-stub { transform: none; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <div class="brand">
+      <span class="brand-mark">CD</span>
+      <span class="brand-name">Civic&nbsp;Desk</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#file">File a report</a>
+      <a href="#board">Docket board</a>
+      <a href="#how">How it works</a>
+    </nav>
+    <div class="live-count">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="openCount">0</span> open cases
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">Case intake — open to the public</p>
+      <h1>Something's wrong<br>on your street?<br><span class="hero-underline">Put it on record.</span></h1>
+      <p class="hero-sub">Crime and safety, roads and transit, courts and permits, water and power. File it once here, and it's logged, numbered, and visible — to your neighbors and to the office that owes you an answer.</p>
+      <div class="hero-actions">
+        <a href="#file" class="btn btn-primary">File a report</a>
+        <a href="#board" class="btn btn-ghost">See open cases</a>
+      </div>
+    </div>
+
+    <div class="hero-ticket" aria-hidden="true">
+      <div class="ticket-stub">
+        <div class="ticket-stub-head">
+          <span>CASE FILE</span>
+          <span class="stamp stamp-amber">PENDING</span>
+        </div>
+        <div class="ticket-stub-id">No. <span id="previewId">CD-2026-0000</span></div>
+        <div class="ticket-stub-row"><span>Category</span><strong>Roads &amp; Transport</strong></div>
+        <div class="ticket-stub-row"><span>Filed</span><strong id="previewDate">—</strong></div>
+        <div class="ticket-stub-row"><span>Location</span><strong>Ward 4, Main St</strong></div>
+        <div class="ticket-perf" aria-hidden="true"></div>
+        <p class="ticket-note">"Pothole at Main &amp; 5th has taken out two tires this month."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="categories">
+  <div class="wrap">
+    <p class="section-label">01 — What kind of issue</p>
+    <div class="cat-grid">
+      <button class="cat-card" data-cat="crime">
+        <span class="cat-glyph">⚠</span>
+        <span class="cat-title">Crime &amp; Safety</span>
+        <span class="cat-desc">Theft, vandalism, harassment, unsafe areas</span>
+      </button>
+      <button class="cat-card" data-cat="justice">
+        <span class="cat-glyph">⚖</span>
+        <span class="cat-title">Justice &amp; Legal</span>
+        <span class="cat-desc">Court delays, permits, disputed fines</span>
+      </button>
+      <button class="cat-card" data-cat="roads">
+        <span class="cat-glyph">🛣</span>
+        <span class="cat-title">Roads &amp; Transport</span>
+        <span class="cat-desc">Potholes, signals, transit delays, sidewalks</span>
+      </button>
+      <button class="cat-card" data-cat="utilities">
+        <span class="cat-glyph">⚡</span>
+        <span class="cat-title">Utilities</span>
+        <span class="cat-desc">Water, power, waste collection</span>
+      </button>
+      <button class="cat-card" data-cat="public">
+        <span class="cat-glyph">🏛</span>
+        <span class="cat-title">Public Spaces</span>
+        <span class="cat-desc">Parks, lighting, noise, accessibility</span>
+      </button>
+      <button class="cat-card" data-cat="other">
+        <span class="cat-glyph">✎</span>
+        <span class="cat-title">Something else</span>
+        <span class="cat-desc">Doesn't fit above — tell us anyway</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="file" class="filing">
+  <div class="wrap filing-grid">
+    <div class="filing-intro">
+      <p class="section-label">02 — File the report</p>
+      <h2>Every case gets<br>a number.</h2>
+      <p class="filing-sub">No account needed. Your report is timestamped, filed under the right department, and added to the public docket board so others nearby can back it up.</p>
+      <ul class="filing-list">
+        <li><strong>Be specific.</strong> Cross-streets and landmarks beat "near my house."</li>
+        <li><strong>One issue per report.</strong> File separately if it's unrelated.</li>
+        <li><strong>Contact is optional</strong> but lets the department follow up.</li>
+      </ul>
+    </div>
+
+    <form id="reportForm" class="filing-form" novalidate>
+      <div class="field">
+        <label for="category">Category</label>
+        <select id="category" required>
+          <option value="" disabled selected>Select a category…</option>
+          <option value="crime">Crime &amp; Safety</option>
+          <option value="justice">Justice &amp; Legal</option>
+          <option value="roads">Roads &amp; Transport</option>
+          <option value="utilities">Utilities</option>
+          <option value="public">Public Spaces</option>
+          <option value="other">Something else</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="title">Short title</label>
+        <input type="text" id="title" maxlength="80" placeholder="e.g. Broken streetlight at 5th &amp; Main" required>
+      </div>
+
+      <div class="field">
+        <label for="location">Location</label>
+        <input type="text" id="location" maxlength="120" placeholder="Cross-street, address, or landmark" required>
+      </div>
+
+      <div class="field">
+        <label for="description">What's happening</label>
+        <textarea id="description" rows="4" maxlength="600" placeholder="Describe the issue, when it started, and who it affects." required></textarea>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="urgency">Urgency</label>
+          <select id="urgency" required>
+            <option value="routine">Routine — can wait weeks</option>
+            <option value="soon" selected>Needs attention — days</option>
+            <option value="urgent">Urgent — safety risk now</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="contact">Contact <span class="optional">(optional)</span></label>
+          <input type="text" id="contact" maxlength="120" placeholder="Email or phone, for updates only">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="evidence">Photo or video <span class="optional">(optional, up to 3 files)</span></label>
+        <div class="upload-well" id="uploadWell">
+          <input type="file" id="evidence" accept="image/*,video/*" multiple hidden>
+          <div class="upload-well-inner">
+            <span class="upload-icon">📎</span>
+            <span class="upload-text">Drop photo/video here, or <span class="upload-link">browse</span></span>
+            <span class="upload-hint">Shows the issue at Main &amp; 5th, a leak, a broken sign — whatever's relevant.</span>
+          </div>
+        </div>
+        <div id="uploadPreviews" class="upload-previews"></div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-submit">Submit report</button>
+      <p class="form-note" id="formNote"></p>
+    </form>
+  </div>
+</section>
+
+<section id="board" class="board">
+  <div class="wrap">
+    <div class="board-head">
+      <div>
+        <p class="section-label">03 — The public docket</p>
+        <h2>Open cases in your area</h2>
+      </div>
+      <div class="board-filters" role="group" aria-label="Filter by status">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="received">Received</button>
+        <button class="filter-chip" data-filter="review">Under review</button>
+        <button class="filter-chip" data-filter="progress">In progress</button>
+        <button class="filter-chip" data-filter="resolved">Resolved</button>
+      </div>
+    </div>
+
+    <div id="ticketGrid" class="ticket-grid"></div>
+    <p id="emptyState" class="empty-state">No cases filed yet. Be the first — file one above.</p>
+  </div>
+</section>
+
+<section id="how" class="how">
+  <div class="wrap how-grid">
+    <div class="how-step">
+      <span class="how-num">01</span>
+      <h3>File</h3>
+      <p>Describe the issue and pick a category. It's filed instantly with a case number.</p>
+    </div>
+    <div class="how-step">
+      <span class="how-num">02</span>
+      <h3>Corroborate</h3>
+      <p>Neighbors with the same issue can back your case, showing departments it's not isolated.</p>
+    </div>
+    <div class="how-step">
+      <span class="how-num">03</span>
+      <h3>Track</h3>
+      <p>Status moves from Received to Under Review to In Progress to Resolved — visible to everyone.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <span>Civic Desk — a public issue ledger.</span>
+    <span class="footer-note">This is a working prototype: cases are stored in this browser session only.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  const CATEGORY_LABELS = {
+    crime: "Crime & Safety",
+    justice: "Justice & Legal",
+    roads: "Roads & Transport",
+    utilities: "Utilities",
+    public: "Public Spaces",
+    other: "Something else"
+  };
+
+  const STATUS_SEQUENCE = ["received", "review", "progress", "resolved"];
+  const STATUS_LABELS = {
+    received: "Received",
+    review: "Under review",
+    progress: "In progress",
+    resolved: "Resolved"
+  };
+  const STATUS_STAMP_CLASS = {
+    received: "stamp-amber",
+    review: "stamp-blue",
+    progress: "stamp-blue",
+    resolved: "stamp-moss"
+  };
+
+  let cases = [];
+  let nextNumber = 214; // starts mid-sequence so the board doesn't look brand new
+  let activeFilter = "all";
+  let backedIds = new Set();
+
+  const form = document.getElementById("reportForm");
+  const categorySelect = document.getElementById("category");
+  const ticketGrid = document.getElementById("ticketGrid");
+  const emptyState = document.getElementById("emptyState");
+  const openCountEl = document.getElementById("openCount");
+  const formNote = document.getElementById("formNote");
+  const previewId = document.getElementById("previewId");
+  const previewDate = document.getElementById("previewDate");
+
+  const uploadWell = document.getElementById("uploadWell");
+  const evidenceInput = document.getElementById("evidence");
+  const uploadPreviews = document.getElementById("uploadPreviews");
+  const MAX_FILES = 3;
+  const MAX_FILE_MB = 15;
+  let pendingFiles = []; // { url, kind: 'image'|'video', name }
+
+  function renderUploadPreviews() {
+    uploadPreviews.innerHTML = "";
+    pendingFiles.forEach((f, idx) => {
+      const thumb = document.createElement("div");
+      thumb.className = "upload-thumb";
+      thumb.innerHTML =
+        f.kind === "image"
+          ? `<img src="${f.url}" alt="${escapeHtml(f.name)}">`
+          : `<video src="${f.url}" muted></video><span class="video-badge">Video</span>`;
+      const removeBtn = document.createElement("button");
+      removeBtn.className = "remove-thumb";
+      removeBtn.type = "button";
+      removeBtn.setAttribute("aria-label", `Remove ${f.name}`);
+      removeBtn.textContent = "×";
+      removeBtn.addEventListener("click", () => {
+        pendingFiles.splice(idx, 1);
+        renderUploadPreviews();
+      });
+      thumb.appendChild(removeBtn);
+      uploadPreviews.appendChild(thumb);
+    });
+  }
+
+  function addFiles(fileList) {
+    const files = Array.from(fileList).filter((f) => f.type.startsWith("image/") || f.type.startsWith("video/"));
+    for (const file of files) {
+      if (pendingFiles.length >= MAX_FILES) {
+        formNote.textContent = `Up to ${MAX_FILES} files per report — that's plenty to show what's wrong.`;
+        formNote.classList.add("error");
+        break;
+      }
+      if (file.size > MAX_FILE_MB * 1024 * 1024) {
+        formNote.textContent = `${file.name} is over ${MAX_FILE_MB}MB — try a smaller file.`;
+        formNote.classList.add("error");
+        continue;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        pendingFiles.push({
+          url: reader.result,
+          kind: file.type.startsWith("video/") ? "video" : "image",
+          name: file.name
+        });
+        renderUploadPreviews();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  uploadWell.addEventListener("click", () => evidenceInput.click());
+  uploadWell.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); evidenceInput.click(); }
+  });
+  uploadWell.setAttribute("tabindex", "0");
+  uploadWell.setAttribute("role", "button");
+  uploadWell.setAttribute("aria-label", "Upload photo or video");
+
+  evidenceInput.addEventListener("change", (e) => {
+    addFiles(e.target.files);
+    evidenceInput.value = "";
+  });
+
+  ["dragover", "dragenter"].forEach((evt) => {
+    uploadWell.addEventListener(evt, (e) => {
+      e.preventDefault();
+      uploadWell.classList.add("dragover");
+    });
+  });
+  ["dragleave", "drop"].forEach((evt) => {
+    uploadWell.addEventListener(evt, (e) => {
+      e.preventDefault();
+      uploadWell.classList.remove("dragover");
+    });
+  });
+  uploadWell.addEventListener("drop", (e) => {
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+
+  function pad(n, len) {
+    return String(n).padStart(len, "0");
+  }
+
+  function formatCaseId(n) {
+    const year = new Date().getFullYear();
+    return `CD-${year}-${pad(n, 4)}`;
+  }
+
+  function formatDate(d) {
+    return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  }
+
+  function updatePreview() {
+    previewId.textContent = formatCaseId(nextNumber);
+    previewDate.textContent = formatDate(new Date());
+  }
+
+  // Category cards feed the form
+  document.querySelectorAll(".cat-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".cat-card").forEach((c) => c.classList.remove("active"));
+      card.classList.add("active");
+      categorySelect.value = card.dataset.cat;
+      document.getElementById("file").scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById("title").focus({ preventScroll: true });
+    });
+  });
+
+  categorySelect.addEventListener("change", () => {
+    document.querySelectorAll(".cat-card").forEach((c) => {
+      c.classList.toggle("active", c.dataset.cat === categorySelect.value);
+    });
+  });
+
+  function renderTicket(item) {
+    const el = document.createElement("article");
+    el.className = "board-ticket";
+    el.dataset.status = item.status;
+
+    const stampClass = STATUS_STAMP_CLASS[item.status];
+    const isBacked = backedIds.has(item.id);
+
+    const media = item.media && item.media.length
+      ? `<div class="board-ticket-media count-${item.media.length}">${item.media
+          .map((m) =>
+            m.kind === "image"
+              ? `<div class="media-thumb"><img src="${m.url}" alt="Photo submitted with ${item.caseId}"></div>`
+              : `<div class="media-thumb"><video src="${m.url}" controls muted></video></div>`
+          )
+          .join("")}</div>`
+      : "";
+
+    el.innerHTML = `
+      <div class="board-ticket-head">
+        <div>
+          <div class="board-ticket-id">${item.caseId}</div>
+          <h3 class="board-ticket-title">${escapeHtml(item.title)}</h3>
+        </div>
+        <span class="stamp ${stampClass}">${STATUS_LABELS[item.status]}</span>
+      </div>
+      <div class="board-ticket-meta">
+        <span>${CATEGORY_LABELS[item.category]}</span>
+        <span>·</span>
+        <span>${escapeHtml(item.location)}</span>
+        <span>·</span>
+        <span>${formatDate(item.filedAt)}</span>
+      </div>
+      <p class="board-ticket-desc">${escapeHtml(item.description)}</p>
+      ${media}
+      <div class="board-ticket-foot">
+        <span class="urgency-tag ${item.urgency === "urgent" ? "urgent" : ""}">${item.urgency} priority</span>
+        <button class="back-btn ${isBacked ? "backed" : ""}" data-id="${item.id}">
+          ${isBacked ? "✓ Backed" : "+ Back this"} (<span class="back-count">${item.backers}</span>)
+        </button>
+      </div>
+    `;
+
+    el.querySelector(".back-btn").addEventListener("click", (e) => {
+      const btn = e.currentTarget;
+      if (backedIds.has(item.id)) return;
+      backedIds.add(item.id);
+      item.backers += 1;
+      btn.classList.add("backed");
+      btn.innerHTML = `✓ Backed (<span class="back-count">${item.backers}</span>)`;
+    });
+
+    return el;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderBoard() {
+    ticketGrid.innerHTML = "";
+    const visible = cases.filter((c) => activeFilter === "all" || c.status === activeFilter);
+
+    visible
+      .slice()
+      .sort((a, b) => b.filedAt - a.filedAt)
+      .forEach((item) => ticketGrid.appendChild(renderTicket(item)));
+
+    emptyState.classList.toggle("show", visible.length === 0);
+    openCountEl.textContent = cases.filter((c) => c.status !== "resolved").length;
+  }
+
+  document.querySelectorAll(".filter-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll(".filter-chip").forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeFilter = chip.dataset.filter;
+      renderBoard();
+    });
+  });
+
+  function seedDemoCases() {
+    const seed = [
+      {
+        title: "Pothole at Main & 5th",
+        category: "roads",
+        location: "Main St / 5th Ave",
+        description: "Deep pothole in the right lane, already caused two flat tires this month.",
+        urgency: "urgent",
+        status: "progress",
+        backers: 14,
+        daysAgo: 6
+      },
+      {
+        title: "Streetlight out on Cedar Ln",
+        category: "public",
+        location: "Cedar Lane, block 200",
+        description: "Light's been dark for two weeks, makes the bus stop hard to see at night.",
+        urgency: "soon",
+        status: "review",
+        backers: 6,
+        daysAgo: 3
+      },
+      {
+        title: "Court date rescheduled with no notice",
+        category: "justice",
+        location: "County Courthouse, Rm 204",
+        description: "Hearing moved twice without written notice — third reschedule this year.",
+        urgency: "soon",
+        status: "received",
+        backers: 2,
+        daysAgo: 1
+      },
+      {
+        title: "Water main leak flooding sidewalk",
+        category: "utilities",
+        location: "Elm St near the school",
+        description: "Steady leak pooling on the sidewalk, ice risk once it gets colder.",
+        urgency: "urgent",
+        status: "resolved",
+        backers: 9,
+        daysAgo: 11
+      }
+    ];
+
+    seed.forEach((s) => {
+      const filedAt = new Date();
+      filedAt.setDate(filedAt.getDate() - s.daysAgo);
+      cases.push({
+        id: crypto.randomUUID(),
+        caseId: formatCaseId(nextNumber++),
+        title: s.title,
+        category: s.category,
+        location: s.location,
+        description: s.description,
+        urgency: s.urgency,
+        status: s.status,
+        backers: s.backers,
+        filedAt
+      });
+    });
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const category = categorySelect.value;
+    const title = document.getElementById("title").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const urgency = document.getElementById("urgency").value;
+
+    if (!category || !title || !location || !description) {
+      formNote.textContent = "Fill in category, title, location, and description to file.";
+      formNote.classList.add("error");
+      return;
+    }
+
+    const newCase = {
+      id: crypto.randomUUID(),
+      caseId: formatCaseId(nextNumber++),
+      title,
+      category,
+      location,
+      description,
+      urgency,
+      status: "received",
+      backers: 1,
+      filedAt: new Date(),
+      media: pendingFiles.slice(0, MAX_FILES)
+    };
+    cases.push(newCase);
+
+    const mediaNote = newCase.media.length ? ` with ${newCase.media.length} file${newCase.media.length > 1 ? "s" : ""} attached` : "";
+    formNote.classList.remove("error");
+    formNote.textContent = `Filed as ${newCase.caseId}${mediaNote}. It's now on the public docket board below.`;
+
+    form.reset();
+    pendingFiles = [];
+    renderUploadPreviews();
+    document.querySelectorAll(".cat-card").forEach((c) => c.classList.remove("active"));
+    updatePreview();
+    renderBoard();
+
+    document.getElementById("board").scrollIntoView({ behavior: "smooth", block: "start" });
+
+    setTimeout(() => { formNote.textContent = ""; }, 6000);
+  });
+
+  seedDemoCases();
+  updatePreview();
+  renderBoard();
+})();
+
+</script>
+</body>
+</html>
